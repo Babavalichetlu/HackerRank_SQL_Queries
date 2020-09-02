@@ -1,10 +1,2 @@
-package com.sql.quries;
-
-public class sample {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
-}
+SELECT id,name from customer
+ORDER by name DESC,id ASC; 
