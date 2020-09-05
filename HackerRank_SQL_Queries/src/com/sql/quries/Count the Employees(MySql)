@@ -1,0 +1,5 @@
+#print the ID's companies that have more than 10000 Employees in ascending order of ID's
+
+SELECT id FROM company
+WHERE employees>=10000 
+ORDER by ID ASC;
