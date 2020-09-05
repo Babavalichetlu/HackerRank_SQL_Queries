@@ -1,0 +1,43 @@
+/*
+Julia asked her students to create some coding challenges.
+Write a query to print the hacker_id, name, and the total number
+of challenges created by each student. Sort your results by the
+total number of challenges in descending order. If more than one 
+student created the same number of challenges, then sort the result by hacker_id.
+If more than one student created the same number of challenges and the count is
+less than the maximum number of challenges created, then exclude those students from the result.
+*/
+
+My Sql :
+---------
+select a.hacker_id,a.name,count(b.hacker_id)    
+    from Hackers a, Challenges b
+    WHERE a.hacker_id = b.hacker_id
+    GROUP BY a.hacker_id,a.name
+    HAVING count(b.hacker_id) not in (select  distinct count(hacker_id) from Challenges
+    WHERE hacker_id <> a.hacker_id
+    group by hacker_id
+    having count(hacker_id) < (select max(x.challenge_count) 
+    from (select count(b.challenge_id) as challenge_count from Challenges b GROUP BY b.hacker_id) as x ))
+    ORDER BY count(b.hacker_id) desc, a.hacker_id 
+    
+ Using Oracle:
+ --------------
+ SELECT HACKER_ID, NAME, CHALLENGES_CREATED FROM (
+SELECT 
+H.HACKER_ID,
+H.NAME,
+CHALLENGES_CREATED,
+MAX(CHALLENGES_CREATED) OVER (ORDER BY 1) AS MX_CHLNG,
+COUNT(CHALLENGES_CREATED) OVER(PARTITION BY CHALLENGES_CREATED) AS NO_OF_COMMON_CHLNG_HCKR
+FROM HACKERS H
+JOIN (SELECT DISTINCT
+     HACKER_ID, COUNT(CHALLENGE_ID) OVER (PARTITION BY HACKER_ID) AS CHALLENGES_CREATED
+     FROM CHALLENGES
+     )C
+ON H.HACKER_ID=C.HACKER_ID
+)A
+WHERE NO_OF_COMMON_CHLNG_HCKR=1 OR
+(CHALLENGES_CREATED>=MX_CHLNG AND NO_OF_COMMON_CHLNG_HCKR!=1)
+ORDER BY CHALLENGES_CREATED DESC, HACKER_ID
+;
