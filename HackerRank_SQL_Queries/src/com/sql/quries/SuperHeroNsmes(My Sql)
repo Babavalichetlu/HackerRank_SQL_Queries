@@ -1,0 +1,7 @@
+/*
+write a query to print superHeors name whose name is less than or equals to 6 charaxters
+*/
+
+
+
+SELECT SUPERHERO.NAME FROM SUPERHERO WHERE LENGTH(SUPERHERO.NAME)<= 6;
