@@ -1,0 +1,3 @@
+Having lot of orders which some are not delived... 
+
+select  Count(*) from orders where NOT Status = "DELIVERED";
